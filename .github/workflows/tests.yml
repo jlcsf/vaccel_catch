@@ -23,20 +23,9 @@ jobs:
           ./test_plugins >> test_output.txt
           ./test_session >> test_output.txt
           ./test_misc >> test_output.txt
-          
+
       - name: Remove headers and color codes from test output
         run: |
           sed -i -e '/====/d' -e '/Randomness seeded to/d' -e 's/\x1b\[[0-9;]*m//g' build/test_output.txt
-
-      - name: Create README
-        run: |
-          echo -e "\e[91m Test \e[0m" > README.md
-          cat build/test_output.txt >> README.md
-          echo -e "\e[91m Plugin Test \e[0m" >> README.md
-          cat build/test_output.txt >> README.md
-          echo -e "\e[91m Session Test \e[0m" >> README.md
-          cat build/test_output.txt >> README.md
-          echo -e "\e[91m Misc test \e[0m" >> README.md
-          cat build/test_output.txt >> README.md
 
       - uses: stefanzweifel/git-auto-commit-action@v4
