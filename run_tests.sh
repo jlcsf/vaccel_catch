@@ -11,4 +11,4 @@ echo -e "\e[91m Plugin Test \e[0m"
 echo -e "\e[91m Session Test \e[0m"
 ./test_session
 echo -e "\e[91m Misc test \e[0m"
-./test_misc   
+./test_misc
