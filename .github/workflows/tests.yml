@@ -23,6 +23,10 @@ jobs:
           ./test_plugins >> test_output.txt
           ./test_session >> test_output.txt
           ./test_misc >> test_output.txt
+          
+      - name: Remove headers and color codes from test output
+        run: |
+          sed -i -e '/====/d' -e '/Randomness seeded to/d' -e 's/\x1b\[[0-9;]*m//g' build/test_output.txt
 
       - name: Create README
         run: |
