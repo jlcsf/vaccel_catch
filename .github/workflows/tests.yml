@@ -26,7 +26,7 @@ jobs:
 
       - name: Remove headers and color codes from test output
         run: |
-            sed -i -e '/====/d' -e '/Randomness seeded to/d' -e 's/\x1b\[[0-9;]*m//g' $GITHUB_WORKSPACE/test_output.txt
+            sed -i 's/\x1b\[[0-9;]*m//g' $GITHUB_WORKSPACE/test_output.txt
         
       
       - uses: stefanzweifel/git-auto-commit-action@v4
