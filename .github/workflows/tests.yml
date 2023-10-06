@@ -19,13 +19,13 @@ jobs:
           cd build
           cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON -DBUILD_EXAMPLES=ON
           make
-          ./tests > test_output.txt
-          ./test_plugins >> test_output.txt
-          ./test_session >> test_output.txt
-          ./test_misc >> test_output.txt
+          ./tests > ../test_output.txt
+          ./test_plugins >> ../test_output.txt
+          ./test_session >> ../test_output.txt
+          ./test_misc >> ../test_output.txt
 
       - name: Remove headers and color codes from test output
         run: |
-          sed -i -e '/====/d' -e '/Randomness seeded to/d' -e 's/\x1b\[[0-9;]*m//g' build/test_output.txt
-
+          sed -i -e '/====/d' -e '/Randomness seeded to/d' -e 's/\x1b\[[0-9;]*m//g' ../test_output.txt
+      
       - uses: stefanzweifel/git-auto-commit-action@v4
