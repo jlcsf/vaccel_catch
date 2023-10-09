@@ -27,11 +27,16 @@ jobs:
           export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so
           ./test_fpga >> ../test_output.txt
 
-
-
       - name: Remove headers and color codes from test output
         run: |
             sed -i 's/\x1b\[[0-9;]*m//g' $GITHUB_WORKSPACE/test_output.txt
-        
+      
+      - name: Copy test output to README
+        run: |
+            echo '```' > temp_output.txt
+            cat test_output.txt >> temp_output.txt
+            echo '```' >> temp_output.txt
+            mv temp_output.txt README.md
+        shell: bash
       
       - uses: stefanzweifel/git-auto-commit-action@v4
