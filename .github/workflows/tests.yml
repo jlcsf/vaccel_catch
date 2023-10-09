@@ -24,6 +24,11 @@ jobs:
           ./test_session >> ../test_output.txt
           ./test_misc >> ../test_output.txt
 
+          export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so
+          ./test_fpga >> ../test_output.txt
+
+
+
       - name: Remove headers and color codes from test output
         run: |
             sed -i 's/\x1b\[[0-9;]*m//g' $GITHUB_WORKSPACE/test_output.txt

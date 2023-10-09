@@ -82,6 +82,7 @@ target_link_libraries(tests PRIVATE Catch2::Catch2WithMain gcov)
 
 include_directories(src)
 include_directories(src/include)
+include_directories(src/include/ops)
 include_directories(fff)
 
 
@@ -97,6 +98,9 @@ add_executable(test_misc tests/test_misc.cpp)
 target_compile_options(test_misc PRIVATE -Wall -Wextra -g -ggdb -coverage)
 target_link_libraries(test_misc PRIVATE Catch2::Catch2WithMain vaccel gcov)
 
+add_executable(test_fpga tests/test_fpga.cpp)
+target_compile_options(test_fpga PRIVATE -Wall -Wextra -g -ggdb)
+target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop)
 
 endif (ENABLE_TESTS)
 
