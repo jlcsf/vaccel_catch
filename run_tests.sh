@@ -1,5 +1,5 @@
 #!/bin/bash
-rm build -rf
+# rm build -rf
 mkdir -p build
 cd build
 cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON
@@ -12,6 +12,8 @@ echo -e "\e[91m Session Test \e[0m"
 ./test_session
 echo -e "\e[91m Misc test \e[0m"
 ./test_misc
+echo -e "\e[91m Resource test \e[0m"
+./test_resource
 
 
 export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so
