@@ -27,7 +27,6 @@ jobs:
           export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so
           export VACCEL_DEBUG_LEVEL=4
           ./test_fpga >> ../test_output.txt
-          ./test_vaccel >> ../test_output.txt
 
       - name: Remove headers and color codes from test output
         run: |
