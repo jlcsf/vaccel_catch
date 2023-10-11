@@ -22,6 +22,7 @@
     #include <stdatomic.h> 
 #endif
 
+// #include <stdatomic.h> 
 #include <stdint.h>
 
 #include "include/vaccel_id.h"

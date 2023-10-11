@@ -1,5 +1,5 @@
 #!/bin/bash
-# rm build -rf
+rm build -rf
 mkdir -p build
 cd build
 cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON
@@ -16,6 +16,12 @@ echo -e "\e[91m Resource test \e[0m"
 ./test_resource
 
 
+
 export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so
-echo -e "\e[91m FPGA add test \e[0m"
+echo -e "\e[91m FPGA plugin test \e[0m"
 ./test_fpga
+
+
+export VACCEL_DEBUG_LEVEL=4
+echo -e "\e[91m Vaccel test \e[0m"
+./test_vaccel

@@ -201,7 +201,11 @@ static void vaccel_fini(void)
 {
 	vaccel_debug("Shutting down vAccel");
 	plugins_shutdown();
+	vaccel_debug("Shut down plugins");
 	resources_cleanup();
+	vaccel_debug("Shut down resources");
 	sessions_cleanup();
+	vaccel_debug("Shut down sessions");
 	cleanup_vaccel_rundir();
+	vaccel_debug("Shut down rundir");
 }

@@ -1,7 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <fff.h>
 #include <atomic>
-#include <iostream>
+// #include <iostream>
 DEFINE_FFF_GLOBALS;
 extern "C"{
 #include "session.h"

@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON -DBUILD_EXAMPLES=ON
+          cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON
           make
           ./tests > ../test_output.txt
           ./test_plugins >> ../test_output.txt
@@ -25,7 +25,9 @@ jobs:
           ./test_misc >> ../test_output.txt
 
           export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so
+          export VACCEL_DEBUG_LEVEL=4
           ./test_fpga >> ../test_output.txt
+          ./test_vaccel >> ../test_output.txt
 
       - name: Remove headers and color codes from test output
         run: |

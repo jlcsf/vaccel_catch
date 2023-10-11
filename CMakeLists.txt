@@ -80,33 +80,79 @@ file(GLOB HEADER_INCLUDE_FILES "${CMAKE_SOURCE_DIR}")
 add_executable(tests tests/test.cpp)
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain gcov)
 
-
-include_directories(src)
-include_directories(src/include)
-include_directories(third-party/slog/src)
-include_directories(src/include/ops)
-include_directories(fff)
-
-
 add_executable(test_plugins tests/test_plugin.cpp)
+target_include_directories(test_plugins
+    PRIVATE
+        third-party/slog/src
+        src
+        src/include
+        build
+        fff
+)
 target_compile_options(test_plugins PRIVATE -Wall -Wextra -g -ggdb -coverage)
 target_link_libraries(test_plugins PRIVATE Catch2::Catch2WithMain vaccel gcov)
 
 add_executable(test_session tests/test_session.cpp)
+target_include_directories(test_session
+    PRIVATE
+        third-party/slog/src
+        src
+        src/include
+        build
+        fff 
+)
 target_compile_options(test_session PRIVATE -Wall -Wextra -g -ggdb -coverage)
 target_link_libraries(test_session PRIVATE Catch2::Catch2WithMain vaccel gcov)
 
 add_executable(test_resource tests/test_resource.cpp)
+target_include_directories(test_resource
+    PRIVATE
+        third-party/slog/src
+        src
+        src/include
+        build
+        fff
+)
 target_compile_options(test_resource PRIVATE -Wall -Wextra -g -ggdb -coverage)
 target_link_libraries(test_resource PRIVATE Catch2::Catch2WithMain vaccel gcov)
 
-add_executable(test_misc tests/test_misc.cpp src/misc.c)
+add_executable(test_misc tests/test_misc.cpp)
+target_include_directories(test_misc
+    PRIVATE
+        third-party/slog/src
+        src
+        src/include
+        build
+        fff
+)
 target_compile_options(test_misc PRIVATE -Wall -Wextra -g -ggdb -coverage)
 target_link_libraries(test_misc PRIVATE Catch2::Catch2WithMain vaccel gcov)
 
+
 add_executable(test_fpga tests/test_fpga.cpp)
+target_include_directories(test_fpga
+    PRIVATE
+        third-party/slog/src
+        src
+        src/include
+        src/include/ops
+        build
+        fff
+)
 target_compile_options(test_fpga PRIVATE -Wall -Wextra -g -ggdb)
 target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop)
+
+add_executable(test_vaccel tests/test_vaccel.cpp src/vaccel.c)
+target_include_directories(test_vaccel
+    PRIVATE
+        third-party/slog/src
+        src
+        src/include
+        build
+        fff
+)
+target_compile_options(test_vaccel PRIVATE -Wall -Wextra -g -ggdb -coverage)
+target_link_libraries(test_vaccel PRIVATE Catch2::Catch2WithMain vaccel gcov)
 
 
 endif (ENABLE_TESTS)
