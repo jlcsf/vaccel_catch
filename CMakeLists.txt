@@ -128,6 +128,18 @@ target_include_directories(test_misc
 target_compile_options(test_misc PRIVATE -Wall -Wextra -g -ggdb -coverage)
 target_link_libraries(test_misc PRIVATE Catch2::Catch2WithMain vaccel gcov)
 
+add_executable(test_id_pool tests/test_id_pool.cpp)
+target_include_directories(test_id_pool
+    PRIVATE
+        third-party/slog/src
+        src
+        src/include
+        build
+        fff
+)
+target_compile_options(test_id_pool PRIVATE -Wall -Wextra -g -ggdb -coverage)
+target_link_libraries(test_id_pool PRIVATE Catch2::Catch2WithMain vaccel gcov)
+
 
 add_executable(test_fpga tests/test_fpga.cpp)
 target_include_directories(test_fpga
@@ -142,7 +154,7 @@ target_include_directories(test_fpga
 target_compile_options(test_fpga PRIVATE -Wall -Wextra -g -ggdb)
 target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop)
 
-add_executable(test_vaccel tests/test_vaccel.cpp src/vaccel.c)
+add_executable(test_vaccel tests/test_vaccel.cpp)
 target_include_directories(test_vaccel
     PRIVATE
         third-party/slog/src

@@ -14,7 +14,8 @@ echo -e "\e[91m Misc test \e[0m"
 ./test_misc
 echo -e "\e[91m Resource test \e[0m"
 ./test_resource
-
+echo -e "\e[91m ID_pool test \e[0m"
+./test_id_pool
 
 
 export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so

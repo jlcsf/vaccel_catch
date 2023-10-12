@@ -4,16 +4,11 @@
 DEFINE_FFF_GLOBALS;
 
 extern "C"{
-#include "plugin.h"
-#include "session.h"
-#include "log.h"
 #include "vaccel.h"
-#include "resources.h"
-#include "utils.h"
 }
 
 TEST_CASE("vaccel_rundir valid", "[vaccel_rundir]") {
-    //REQUIRE(vaccel_rundir() != nullptr);
+    // REQUIRE(vaccel_rundir() != nullptr);
     // int ret = VACCEL_EINVAL;
 	// vaccel_log_init();
 
