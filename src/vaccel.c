@@ -156,6 +156,14 @@ const char *vaccel_rundir(void)
 	return rundir;
 }
 
+#ifdef UNIT_TESTING
+int create_vaccel_rundir_for_testing(void) {
+    return create_vaccel_rundir();
+}
+#endif
+
+
+
 __attribute__((constructor))
 static void vaccel_init(void)
 {

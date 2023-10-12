@@ -4,23 +4,34 @@
 DEFINE_FFF_GLOBALS;
 
 extern "C"{
+#include "plugin.h"
+#include "session.h"
+#include "log.h"
+
+#define UNIT_TESTING
 #include "vaccel.h"
+#undef UNIT_TESTING
+
+#include "resources.h"
+#include "utils.h"
+
+#include <sys/stat.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <string.h>
+#include <dlfcn.h>
+#include <stdio.h>
 }
+// #define MAX_RUNDIR_PATH 1024
+// static char rundir[MAX_RUNDIR_PATH];
 
-TEST_CASE("vaccel_rundir valid", "[vaccel_rundir]") {
-    // REQUIRE(vaccel_rundir() != nullptr);
-    // int ret = VACCEL_EINVAL;
-	// vaccel_log_init();
 
-	// vaccel_debug("Initializing vAccel");
-	// vaccel_info("vAccel %s", VACCELRT_VERSION);
-
-	// ret = create_vaccel_rundir();
-    // REQUIRE(ret == VACCEL_OK);
-    // cleanup_vaccel_rundir();
-
-    //use function pointers here
-}
+// extern int create_vaccel_rundir_for_testing();
+// TEST_CASE("Test create_vaccel_rundir", "[create_vaccel_rundir]") 
+// {
+//     int ret = create_vaccel_rundir_for_testing();
+//     REQUIRE(ret == VACCEL_OK);
+// }
 
 TEST_CASE("valid")
 {
