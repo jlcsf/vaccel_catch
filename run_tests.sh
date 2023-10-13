@@ -23,6 +23,5 @@ echo -e "\e[91m FPGA plugin test \e[0m"
 ./test_fpga
 
 
-export VACCEL_DEBUG_LEVEL=4
 echo -e "\e[91m Vaccel test \e[0m"
 ./test_vaccel
