@@ -21,3 +21,6 @@ build*
 .vscode
 
 test_output.txt
+temp
+.gcov
+.info

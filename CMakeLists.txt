@@ -63,6 +63,9 @@ add_subdirectory(python)
 # 	add_subdirectory(test)
 # endif (ENABLE_TESTS)
 if (ENABLE_TESTS)
+
+
+
 Include(FetchContent)
 
 FetchContent_Declare(
@@ -77,8 +80,12 @@ FetchContent_MakeAvailable(Catch2)
 file(GLOB HEADER_FILES "${CMAKE_SOURCE_DIR}" )
 file(GLOB HEADER_INCLUDE_FILES "${CMAKE_SOURCE_DIR}")
 
+
+
 add_executable(tests tests/test.cpp)
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain gcov)
+target_compile_options(tests PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain gcov --coverage)
+
 
 add_executable(test_plugins tests/test_plugin.cpp)
 target_include_directories(test_plugins
@@ -89,8 +96,8 @@ target_include_directories(test_plugins
         build
         fff
 )
-target_compile_options(test_plugins PRIVATE -Wall -Wextra -g -ggdb -coverage)
-target_link_libraries(test_plugins PRIVATE Catch2::Catch2WithMain vaccel gcov)
+target_compile_options(test_plugins PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+target_link_libraries(test_plugins PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 add_executable(test_session tests/test_session.cpp)
 target_include_directories(test_session
@@ -101,8 +108,8 @@ target_include_directories(test_session
         build
         fff 
 )
-target_compile_options(test_session PRIVATE -Wall -Wextra -g -ggdb -coverage)
-target_link_libraries(test_session PRIVATE Catch2::Catch2WithMain vaccel gcov)
+target_compile_options(test_session PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+target_link_libraries(test_session PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 add_executable(test_resource tests/test_resource.cpp)
 target_include_directories(test_resource
@@ -113,8 +120,8 @@ target_include_directories(test_resource
         build
         fff
 )
-target_compile_options(test_resource PRIVATE -Wall -Wextra -g -ggdb -coverage)
-target_link_libraries(test_resource PRIVATE Catch2::Catch2WithMain vaccel gcov)
+target_compile_options(test_resource PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov) 
+target_link_libraries(test_resource PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 add_executable(test_misc tests/test_misc.cpp)
 target_include_directories(test_misc
@@ -125,8 +132,8 @@ target_include_directories(test_misc
         build
         fff
 )
-target_compile_options(test_misc PRIVATE -Wall -Wextra -g -ggdb -coverage)
-target_link_libraries(test_misc PRIVATE Catch2::Catch2WithMain vaccel gcov)
+target_compile_options(test_misc PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+target_link_libraries(test_misc PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 add_executable(test_id_pool tests/test_id_pool.cpp)
 target_include_directories(test_id_pool
@@ -137,8 +144,8 @@ target_include_directories(test_id_pool
         build
         fff
 )
-target_compile_options(test_id_pool PRIVATE -Wall -Wextra -g -ggdb -coverage)
-target_link_libraries(test_id_pool PRIVATE Catch2::Catch2WithMain vaccel gcov)
+target_compile_options(test_id_pool PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+target_link_libraries(test_id_pool PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 
 add_executable(test_fpga tests/test_fpga.cpp)
@@ -151,8 +158,8 @@ target_include_directories(test_fpga
         build
         fff
 )
-target_compile_options(test_fpga PRIVATE -Wall -Wextra -g -ggdb)
-target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop)
+target_compile_options(test_fpga PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
 
 add_executable(test_vaccel tests/test_vaccel.cpp)
 target_include_directories(test_vaccel
@@ -163,9 +170,14 @@ target_include_directories(test_vaccel
         build
         fff
 )
-target_compile_options(test_vaccel PRIVATE -Wall -Wextra -g -ggdb -coverage)
-target_link_libraries(test_vaccel PRIVATE Catch2::Catch2WithMain vaccel gcov)
+target_compile_options(test_vaccel PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+target_link_libraries(test_vaccel PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
+# if(CODE_COVERAGE)
+# include(CodeCoverage.cmake)
+#     append_coverage_compiler_flags()
+#     setup_target_for_coverage_lcov(NAME coverage EXECUTABLE ./bin/tests BASE_DIRECTORY ../coverage)
+# endif()
 
 endif (ENABLE_TESTS)
 

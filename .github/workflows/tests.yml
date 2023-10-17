@@ -54,6 +54,7 @@ jobs:
         shell: bash
         
       - name: Commit test logs/all files
-        uses: stefanzweifel/git-auto-commit-action@v4
         if: always()
+        uses: stefanzweifel/git-auto-commit-action@v4
+        
       

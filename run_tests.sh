@@ -1,27 +1,31 @@
 #!/bin/bash
-rm build -rf
+
+
+rm -rf build
 mkdir -p build
 cd build
 cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON
 make
-echo -e "\e[91m Test \e[0m"  
-./tests
-echo -e "\e[91m Plugin Test \e[0m"  
-./test_plugins
-echo -e "\e[91m Session Test \e[0m"
-./test_session
-echo -e "\e[91m Misc test \e[0m"
-./test_misc
-echo -e "\e[91m Resource test \e[0m"
-./test_resource
-echo -e "\e[91m ID_pool test \e[0m"
-./test_id_pool
-
-
 export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so
-echo -e "\e[91m FPGA plugin test \e[0m"
-./test_fpga
 
+test_targets=(
+  "tests"
+  "test_plugins"
+  "test_session"
+  "test_misc"
+  "test_resource"
+  "test_id_pool"
+  "test_fpga"
+  "test_vaccel"
+)
 
-echo -e "\e[91m Vaccel test \e[0m"
-./test_vaccel
+mkdir -p coverage_data
+
+for target in "${test_targets[@]}"; do
+  echo -e "\e[91m Running $target \e[0m"
+  ./"$target"
+done
+
+## for code coverage -- just manually upload for now.
+
+# ./run_code_coverage.sh
