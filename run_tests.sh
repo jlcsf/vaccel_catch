@@ -8,6 +8,11 @@ cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON
 make
 export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so
 
+# export VACCEL_DEBUG_LEVEL=4
+# test_targets=(
+#   "test_plugins"
+# )
+
 test_targets=(
   "tests"
   "test_plugins"
@@ -18,6 +23,7 @@ test_targets=(
   "test_fpga"
   "test_vaccel"
 )
+
 
 mkdir -p coverage_data
 
