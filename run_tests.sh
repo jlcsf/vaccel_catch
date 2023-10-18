@@ -28,4 +28,5 @@ done
 
 ## for code coverage -- just manually upload for now.
 
-# ./run_code_coverage.sh
+cd ../
+sh ./run_code_coverage.sh
