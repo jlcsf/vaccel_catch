@@ -15,7 +15,7 @@
 #ifndef __VACCEL_H__
 #define __VACCEL_H__
 
-#define VACCELRT_VERSION "ec3ca3f-dirty"
+#define VACCELRT_VERSION "932c71d"
 
 #include "error.h"
 #include "log.h"
