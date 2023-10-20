@@ -1,41 +1,29 @@
 ```
-Randomness seeded to: 3295535541
+Randomness seeded to: 4143363716
 ===============================================================================
 All tests passed (5 assertions in 1 test case)
 
 Plugin test
-Randomness seeded to: 625625137
-===============================================================================
-All tests passed (14 assertions in 4 test cases)
+Randomness seeded to: 2967244356
 
-Session test
-Randomness seeded to: 1362943649
-===============================================================================
-All tests passed (6 assertions in 4 test cases)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_plugins is a Catch2 v3.4.0 host application.
+Run with -? for options
 
-Misc test
-Randomness seeded to: 3375406496
-===============================================================================
-All tests passed (2 assertions in 1 test case)
+-------------------------------------------------------------------------------
+register_plugin_function
+  valid plugin registration
+-------------------------------------------------------------------------------
+/home/runner/work/vaccel_catch/vaccel_catch/tests/test_plugin.cpp:216
+...............................................................................
 
-Resource test
-Randomness seeded to: 1467044086
-===============================================================================
-All tests passed (1 assertion in 1 test case)
+/home/runner/work/vaccel_catch/vaccel_catch/tests/test_plugin.cpp:220: FAILED:
+  REQUIRE( register_plugin_function(&test_op) == 0 )
+with expansion:
+  22 == 0
 
-id_pool test
-Randomness seeded to: 3902106323
 ===============================================================================
-All tests passed (7 assertions in 3 test cases)
-
-FPGA plugin test
-Randomness seeded to: 879974523
-===============================================================================
-All tests passed (20 assertions in 4 test cases)
-
-Vaccel Test
-Randomness seeded to: 2234009683
-===============================================================================
-All tests passed (8 assertions in 1 test case)
+test cases:  4 |  3 passed | 1 failed
+assertions: 26 | 25 passed | 1 failed
 
 ```
