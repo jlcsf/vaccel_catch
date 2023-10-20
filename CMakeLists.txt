@@ -86,6 +86,18 @@ add_executable(tests tests/test.cpp)
 target_compile_options(tests PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain gcov --coverage)
 
+add_executable(test_fpga tests/test_fpga.cpp)
+target_include_directories(test_fpga
+    PRIVATE
+        third-party/slog/src
+        src
+        src/include
+        src/include/ops
+        build
+        fff
+)
+target_compile_options(test_fpga PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
 
 add_executable(test_plugins tests/test_plugin.cpp)
 target_include_directories(test_plugins
@@ -116,7 +128,6 @@ target_include_directories(test_resource
     PRIVATE
         third-party/slog/src
         src
-        src/include
         build
         fff
 )
@@ -127,8 +138,8 @@ add_executable(test_misc tests/test_misc.cpp)
 target_include_directories(test_misc
     PRIVATE
         third-party/slog/src
-        src
         src/include
+        src
         build
         fff
 )
@@ -146,20 +157,6 @@ target_include_directories(test_id_pool
 )
 target_compile_options(test_id_pool PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
 target_link_libraries(test_id_pool PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
-
-
-add_executable(test_fpga tests/test_fpga.cpp)
-target_include_directories(test_fpga
-    PRIVATE
-        third-party/slog/src
-        src
-        src/include
-        src/include/ops
-        build
-        fff
-)
-target_compile_options(test_fpga PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
-target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
 
 add_executable(test_vaccel tests/test_vaccel.cpp)
 target_include_directories(test_vaccel

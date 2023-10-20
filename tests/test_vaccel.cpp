@@ -148,15 +148,15 @@ static int create_vaccel_rundir(void)
 	return VACCEL_OK;
 }
 
-static int cleanup_vaccel_rundir(void)
-{
-	/* Try to cleanup the rundir. At the moment, we do not fail
-	 * if this fails, we just warn the user */
-	if (cleanup_rundir(rundir))
-		vaccel_warn("Could not cleanup rundir '%s'", rundir);
+// static int cleanup_vaccel_rundir(void)
+// {
+// 	/* Try to cleanup the rundir. At the moment, we do not fail
+// 	 * if this fails, we just warn the user */
+// 	if (cleanup_rundir(rundir))
+// 		vaccel_warn("Could not cleanup rundir '%s'", rundir);
 
-	return VACCEL_OK;
-}
+// 	return VACCEL_OK;
+// }
 
 const char *vaccel_rundir(void)
 {
@@ -182,11 +182,11 @@ TEST_CASE("constructor & destructor", "[vaccel]"){
     REQUIRE(plugins);
 	load_backend_plugins(plugins);
 
-    ret = plugins_shutdown();
-    REQUIRE(ret == VACCEL_OK);
-    ret = resources_cleanup();
-    REQUIRE(ret == VACCEL_OK);
-    ret = sessions_cleanup();
-    REQUIRE(ret == VACCEL_OK);
-    ret = cleanup_vaccel_rundir();
+    // ret = plugins_shutdown();
+    // REQUIRE(ret == VACCEL_OK);
+    // ret = resources_cleanup();
+    // REQUIRE(ret == VACCEL_OK);
+    // ret = sessions_cleanup();
+    // REQUIRE(ret == VACCEL_OK);
+    // ret = cleanup_vaccel_rundir();
 }

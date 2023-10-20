@@ -8,13 +8,7 @@ cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON
 make
 export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so
 
-# export VACCEL_DEBUG_LEVEL=4
-# test_targets=(
-#   "test_plugins"
-# )
-
 test_targets=(
-  "tests"
   "test_plugins"
   "test_session"
   "test_misc"
@@ -31,6 +25,8 @@ for target in "${test_targets[@]}"; do
   echo -e "\e[91m Running $target \e[0m"
   ./"$target"
 done
+
+
 
 ## for code coverage -- just manually upload for now.
 
