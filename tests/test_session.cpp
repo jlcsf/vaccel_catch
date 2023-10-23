@@ -52,31 +52,6 @@ int mock_sess_unregister(uint32_t sess_id, vaccel_id_t resource_id){
     (void) resource_id;
     return 0;
 }
-// static const char *vname = "v_plugin";
-// TEST_CASE("session bootstrap and cleanup", "[session]")
-// {
-//     REQUIRE(sessions_bootstrap() == VACCEL_OK);
-//     REQUIRE(sessions_cleanup() == VACCEL_OK);
-// }
-
-
-// TEST_CASE("vaccel_sess_init", "[session]")
-// {   
-//     sessions_bootstrap();
-//     struct vaccel_session test_sess;
-
-//     SECTION("invalid sess struct")
-//     {
-//         REQUIRE(vaccel_sess_init(NULL,0) == VACCEL_EINVAL);
-//     }
-
-//     SECTION("valid initilization")
-//     {
-//         REQUIRE(vaccel_sess_init(&test_sess,0) == VACCEL_OK);
-//         vaccel_sess_free(&test_sess);
-//     }
-//     sessions_cleanup();
-// }
 
 // TEST_CASE("vaccel_sess_update", "[session]")
 // {
@@ -219,7 +194,7 @@ TEST_CASE("session_sess_virtio", "[session]")
 
     RESET_FAKE(get_virtio_plugin);
 
-    // Create a mock plugin and its associated info structure
+    // Create a mock plugin
     struct vaccel_plugin_info v_mock_info;
     v_mock_info.name = "fake_virtio";
     v_mock_info.sess_init = mock_sess_init;

@@ -170,6 +170,20 @@ target_include_directories(test_vaccel
 target_compile_options(test_vaccel PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
 target_link_libraries(test_vaccel PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
+
+add_executable(test_log tests/test_log.cpp)
+target_include_directories(test_log
+    PRIVATE
+        third-party/slog/src
+        src
+        src/include
+        src/include/ops
+        build
+        fff
+)
+target_compile_options(test_log PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+target_link_libraries(test_log PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+
 # if(CODE_COVERAGE)
 # include(CodeCoverage.cmake)
 #     append_coverage_compiler_flags()

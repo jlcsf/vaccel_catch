@@ -16,6 +16,7 @@ test_targets=(
   "test_id_pool"
   "test_fpga"
   "test_vaccel"
+  "test_log"
 )
 
 
