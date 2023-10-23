@@ -41,6 +41,9 @@ jobs:
           echo 'FPGA plugin test' >> ../test_output.txt
           ./test_fpga >> ../test_output.txt
 
+          echo 'log test' >> ../test_output.txt
+          ./test_log >> ../test_output.txt
+
           echo 'Vaccel Test' >> ../test_output.txt
           ./test_vaccel >> ../test_output.txt
 

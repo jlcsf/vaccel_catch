@@ -128,7 +128,6 @@ target_include_directories(test_resource
     PRIVATE
         third-party/slog/src
         src
-        build
         fff
 )
 target_compile_options(test_resource PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov) 
