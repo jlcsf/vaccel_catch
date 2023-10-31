@@ -59,8 +59,9 @@ TEST_CASE("plugin_register", "[plugin]") {
 
     SECTION("not boostrapped")
     {   
-
-        REQUIRE(1 == 1);
+        REQUIRE(plugins_shutdown() == VACCEL_OK);
+        struct vaccel_plugin new_plugin = {};
+        REQUIRE(register_plugin(&new_plugin) == VACCEL_EBACKEND);
     }
 
     SECTION("plugin already registered")
@@ -113,7 +114,8 @@ TEST_CASE("plugin_unregister", "[plugin]") {
 
     SECTION("plugin state is not initialised")
     {
-        REQUIRE(1 == 1);
+        plugins_shutdown();
+        REQUIRE(unregister_plugin(&plugin) == VACCEL_EBACKEND);
     }
 
     SECTION("entry_linked(&plugin.entry) is false")
@@ -159,36 +161,8 @@ TEST_CASE("register_plugin_function", "[plugins]") {
 
     struct vaccel_op test_op;
 
-    // SECTION("invalid vaccel function") {
-    //     REQUIRE(register_plugin_function(NULL) == VACCEL_EINVAL);
-
-    //     test_op.func = NULL;
-    //     test_op.type = VACCEL_FUNCTIONS_NR + 1;
-    //     test_op.owner = plugin_test;
-    //     REQUIRE(register_plugin_function(&test_op) == VACCEL_EINVAL);
-    // }
-
-    // SECTION("Unknown function type") {
-    //     test_op.func = get_plugin_op(VACCEL_EXEC, 0);
-    //     test_op.type = VACCEL_FUNCTIONS_NR + 1;
-    //     test_op.owner = plugin_test;
-    //     REQUIRE(register_plugin_function(&test_op) == VACCEL_EINVAL + 1);
-    // }
-
-    // SECTION("plugin owner is unknown") {
-    //     test_op.func = get_plugin_op(VACCEL_EXEC, 0);
-    //     test_op.type = 1;
-    //     test_op.owner = NULL;
-    //     REQUIRE(register_plugin_function(&test_op) == VACCEL_EINVAL + 2);
-    // }
-
-    // SECTION("valid plugin registration") {
-    //     test_op.func = get_plugin_op(VACCEL_EXEC, 0); 
-    //     test_op.type = 1;
-    //     test_op.owner = plugin_test;
-    //     REQUIRE(register_plugin_function(&test_op) == VACCEL_OK);
-    // }
-
+    /// this registeration is meant to us DL functions but not working at the moment
+    /// instead we just test the register_plugin_functions here instead with mock plugins
 
     SECTION("invalid vaccel function") {
         REQUIRE(register_plugin_function(NULL) == VACCEL_EINVAL);
@@ -223,21 +197,195 @@ TEST_CASE("register_plugin_function", "[plugins]") {
     plugins_shutdown();
 }
 
-TEST_CASE("register_plugin_functions", "[plugins]") {
+static int no_op() {return 1;}
+static int no_op_exec(){return 2;}
+static int no_op_fpga() {return 3;}
 
-    struct vaccel_plugin plugin;
-    struct vaccel_plugin_info pinfo;
+TEST_CASE("register_multiple_plugin_functions", "[plugins]") {
 
-    plugin.info = &pinfo;
-    plugin.info->name = pname;
-    list_init_entry(&plugin.entry);
-    list_init_entry(&plugin.ops);
-    plugin.info->init = init;
-    plugin.info->fini = fini;
+    vaccel_plugin no_op_plugin;
+    vaccel_plugin_info noop_pinfo;
+
+    vaccel_op exec_operation;
+    exec_operation.type = VACCEL_EXEC;
+    exec_operation.func = (void *)no_op_exec;
+    exec_operation.owner = &no_op_plugin;
+
+    vaccel_op copy_operation;
+    copy_operation.type = VACCEL_F_ARRAYCOPY;
+    copy_operation.func = (void *)no_op_fpga;
+    copy_operation.owner = &no_op_plugin;
+
+    vaccel_op array_ops[2] = {exec_operation, copy_operation};
+
+    int ret;
+
+    no_op_plugin.info = &noop_pinfo;
+    no_op_plugin.info->name = pname;
+    list_init_entry(&no_op_plugin.entry);
+    list_init_entry(&no_op_plugin.ops);
+    no_op_plugin.info->init = init;
+    no_op_plugin.info->fini = fini;
 
     plugins_bootstrap();
 
-    /// expand this more
+    ret = register_plugin(&no_op_plugin);
+    REQUIRE(ret ==  VACCEL_OK);
+
+    SECTION("valid multiple functions registerations")
+    {
+        ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
+        REQUIRE(ret ==  VACCEL_OK);
+    }
+
+    SECTION("fetch_plugin_ops for the multiple opetations")
+    {   
+        ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
+        REQUIRE(ret ==  VACCEL_OK);
+
+        void* operation ;
+        operation = get_plugin_op(VACCEL_EXEC, 0);
+        REQUIRE(operation != nullptr);
+        ret = reinterpret_cast<int (*)(void)>(operation)();
+        REQUIRE(ret == 2);
+
+        operation = get_plugin_op(VACCEL_F_ARRAYCOPY, 0);
+        REQUIRE(operation !=  nullptr);
+        ret = reinterpret_cast<int (*)(void)>(operation)();
+        REQUIRE(ret == 3);
+    }
+
+    SECTION("fetch plugin operation using prio env")
+    {
+        ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
+        REQUIRE(ret ==  VACCEL_OK);
+
+        // we have implemented FPGA in our fixture and lets assume our plugin only implements FPGA functions
+	    noop_pinfo.type = VACCEL_PLUGIN_FPGA;
+
+        void* operation = get_plugin_op(VACCEL_F_ARRAYCOPY, VACCEL_PLUGIN_FPGA);
+        REQUIRE(operation != nullptr);
+
+        ret = reinterpret_cast<int (*)(void)>(operation)();
+        REQUIRE(ret == 3);
+    }
+
+    ret = unregister_plugin(&no_op_plugin);
+    REQUIRE(ret == VACCEL_OK);
+
+    plugins_shutdown();
+
+}
+
+
+TEST_CASE("register_plugin_functions_operation_fetch", "[plugins]") {
+
+    vaccel_plugin no_op_plugin;
+    vaccel_plugin_info noop_pinfo;
+    int ret;
+
+    vaccel_op noop_operation;
+    noop_operation.type = VACCEL_NO_OP;
+    noop_operation.func = (void *)no_op;
+    noop_operation.owner = nullptr;
+
+    no_op_plugin.info = &noop_pinfo;
+    no_op_plugin.info->name = pname;
+    list_init_entry(&no_op_plugin.entry);
+    list_init_entry(&no_op_plugin.ops);
+    no_op_plugin.info->init = init;
+    no_op_plugin.info->fini = fini;
+
+    plugins_bootstrap();
+
+    noop_operation.owner = &no_op_plugin;
+    ret = register_plugin(&no_op_plugin);
+    REQUIRE(ret ==  VACCEL_OK);
+
+    SECTION("valid function registeration")
+    {
+        ret = register_plugin_function(&noop_operation);
+        REQUIRE(ret ==  VACCEL_OK);
+    }
+
+    SECTION("unknown function fetch")
+    {
+        ret = register_plugin_function(&noop_operation);
+        REQUIRE(ret ==  VACCEL_OK);
+        enum vaccel_op_type unknown_function = static_cast<enum vaccel_op_type>(VACCEL_FUNCTIONS_NR + 1);
+        void* operation = get_plugin_op(unknown_function, 0);
+        REQUIRE(operation == nullptr);
+    }
+
+    SECTION("not registered function fetch")
+    {        
+        ret = register_plugin_function(&noop_operation);
+        REQUIRE(ret ==  VACCEL_OK);
+        void* operation = get_plugin_op(VACCEL_BLAS_SGEMM, 0);
+        REQUIRE(operation == nullptr);
+    }
+
+    SECTION("NULL plugin operation")
+    {
+        REQUIRE(register_plugin_function(NULL) == VACCEL_EINVAL);
+    }
+
+
+    SECTION("fetch operation valid")
+    {   
+        ret = register_plugin_function(&noop_operation);
+        REQUIRE(ret ==  VACCEL_OK);
+
+        void* operation = get_plugin_op(VACCEL_NO_OP, 0);
+        REQUIRE(operation != nullptr);
+
+        ret = reinterpret_cast<int (*)(void)>(operation)();
+        REQUIRE(ret ==  1);
+    }
+
+    ret = unregister_plugin(&no_op_plugin);
+    REQUIRE(ret == VACCEL_OK);
+
+    plugins_shutdown();
+}
+
+
+TEST_CASE("get_all_available_functions", "[plugins]") {
+
+    vaccel_plugin no_op_plugin;
+    vaccel_plugin_info noop_pinfo;
+    int ret;
+
+    vaccel_op noop_operation;
+    noop_operation.type = VACCEL_NO_OP;
+    noop_operation.func = (void *)no_op;
+    noop_operation.owner = nullptr;
+
+    no_op_plugin.info = &noop_pinfo;
+    no_op_plugin.info->name = pname;
+    list_init_entry(&no_op_plugin.entry);
+    list_init_entry(&no_op_plugin.ops);
+    no_op_plugin.info->init = init;
+    no_op_plugin.info->fini = fini;
+
+    plugins_bootstrap();
+
+    noop_operation.owner = &no_op_plugin;
+    ret = register_plugin(&no_op_plugin);
+    REQUIRE(ret ==  VACCEL_OK);
+
+    ret = register_plugin_function(&noop_operation);
+    REQUIRE(ret ==  VACCEL_OK);
+
+    ret = get_available_plugins(VACCEL_NO_OP);
+    REQUIRE(ret == VACCEL_OK);
+
+    /// this doesn't find exec as we don't implement it but it triggers the branch seen in coverage
+    ret = get_available_plugins(VACCEL_EXEC);
+    REQUIRE(ret == VACCEL_OK);
+
+    ret = unregister_plugin(&no_op_plugin);
+    REQUIRE(ret == VACCEL_OK);
 
     plugins_shutdown();
 }
