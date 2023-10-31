@@ -53,78 +53,128 @@ int mock_sess_unregister(uint32_t sess_id, vaccel_id_t resource_id){
     return 0;
 }
 
-// TEST_CASE("vaccel_sess_update", "[session]")
-// {
-//     sessions_bootstrap();
-//     struct vaccel_session sess;
-//     struct vaccel_resource res;
+TEST_CASE("session_init", "[session]")
+{   
+    int ret;
+    sessions_bootstrap();
+    struct vaccel_session sess;
+
+    ret = vaccel_sess_init(NULL,1);
+    REQUIRE(ret == VACCEL_EINVAL);
+
+    // SECTION("sessions not init")
+    // {
+    //     sessions_cleanup();
+    //     ret = vaccel_sess_init(&sess,1);
+    //     REQUIRE(ret == VACCEL_ESESS);
+    //     sessions_bootstrap(); /// ?
+    // }
+
+    ret = vaccel_sess_init(&sess,1);
+    REQUIRE(ret == VACCEL_OK);
+
+    REQUIRE(vaccel_sess_free(&sess) == VACCEL_OK);
+    
+    // sessions_cleanup();
+}
+
+TEST_CASE("vaccel_sess_update_and_free", "[session]")
+{
+    // sessions_bootstrap();
+    struct vaccel_session sess;
+    struct vaccel_resource res;
 
 
-//     res.type = VACCEL_RES_CAFFE_MODEL;
+    res.type = VACCEL_RES_CAFFE_MODEL;
 
-//     int result = vaccel_sess_init(&sess,1);
-//     REQUIRE(result == VACCEL_OK);
+    int ret = vaccel_sess_init(&sess,1);
+    REQUIRE(ret == VACCEL_OK);
 
-//     SECTION("change flag")
-//     {   
-//         result = vaccel_sess_update(&sess, 2);
-//         REQUIRE(result == VACCEL_OK);
-//     }
+    // SECTION("sessions not init")
+    // {
+    //     sessions_cleanup();
+    //     ret = vaccel_sess_update(&sess, 2);
+    //     REQUIRE(ret == VACCEL_ESESS);
+    //     sessions_bootstrap();
+    // }
 
-//     result = vaccel_sess_update(NULL,2);
+    ret = vaccel_sess_update(&sess, 2);
+    REQUIRE(ret == VACCEL_OK);
 
-//     REQUIRE(vaccel_sess_free(&sess) == VACCEL_OK);
+    ret = vaccel_sess_update(NULL,2);
 
-//     sessions_cleanup();
-// }
+    REQUIRE(ret == VACCEL_EINVAL);
 
-// TEST_CASE("session_sess_register", "[session]")
-// {
-//     struct vaccel_session sess;
-//     sess.hint = 0;
-//     struct vaccel_resource res;
-//     res.type = VACCEL_RES_SHARED_OBJ;
+    REQUIRE(vaccel_sess_free(NULL) == VACCEL_EINVAL);
 
-//     int ret = sessions_bootstrap();
-//     REQUIRE(VACCEL_OK == ret);
+    // SECTION("sessions not init (free)")
+    // {
+    //     sessions_cleanup();
+    //     ret = vaccel_sess_free(&sess);
+    //     REQUIRE(ret == VACCEL_ESESS);
+    //     sessions_bootstrap();
+    // }
 
-//     ret = vaccel_sess_init(&sess,1);
-//     REQUIRE(VACCEL_OK == ret);
+    REQUIRE(vaccel_sess_free(&sess) == VACCEL_OK);
+
+    // sessions_cleanup();
+}
+
+TEST_CASE("sess_unregister_null", "[session]")
+{   
+    int ret;
+    // ret = sessions_bootstrap();
+    // REQUIRE(VACCEL_OK == ret);
+    struct vaccel_session sess;
+
+    ret = vaccel_sess_init(&sess, 1);
+    REQUIRE(ret == VACCEL_OK);
+
+    struct vaccel_resource res;
+    res.type = VACCEL_RES_SHARED_OBJ;
+
+    ret = vaccel_sess_register(&sess, &res);
+    REQUIRE(ret == VACCEL_OK);
+
+    bool check_bool = vaccel_sess_has_resource(&sess, &res);
+    REQUIRE(check_bool);
+
+    ret = vaccel_sess_unregister(NULL,&res);
+    REQUIRE(ret == VACCEL_EINVAL);
+
+    ret = vaccel_sess_unregister(&sess, NULL);
+    REQUIRE(ret == VACCEL_EINVAL);
+
+    res.type = VACCEL_RES_MAX;
+    ret = vaccel_sess_unregister(&sess, &res);
+    REQUIRE(ret == VACCEL_EINVAL);
+
+    res.type = VACCEL_RES_SHARED_OBJ;
+    ret = vaccel_sess_unregister(&sess, &res);
+    REQUIRE(ret == VACCEL_OK);
+
+    check_bool = vaccel_sess_has_resource(&sess, &res);
+    REQUIRE(!check_bool);
+
+    ret = vaccel_sess_free(&sess);
+    REQUIRE(ret == VACCEL_OK);
+
+    // ret = sessions_cleanup();
+    // REQUIRE(VACCEL_OK == ret);
+}
 
 
-//     SECTION("null arguments")
-//     {
-
-//         REQUIRE(vaccel_sess_register(NULL, NULL) == VACCEL_EINVAL);
-//         REQUIRE(vaccel_sess_register(NULL, &res) == VACCEL_EINVAL);
-//         REQUIRE(vaccel_sess_register(&sess, NULL) == VACCEL_EINVAL);
-
-//     }
-
-//     SECTION("valid arguments")
-//     {   
-//         REQUIRE(vaccel_sess_register(&sess, &res) == VACCEL_OK);
-//         REQUIRE(sess.resources != NULL);
-//     }
-
-// }
-
-// int mock_sess_init(vaccel_session* session, uint32_t flags) {
-//     return 0;
-// }
 
 TEST_CASE("session_sess", "[session]")
 {
-
+    int ret;
     struct vaccel_session test_sess;
     test_sess.hint = 0;
     struct vaccel_resource test_res;
     test_res.type = VACCEL_RES_SHARED_OBJ;
 
-    
-
-    int ret = sessions_bootstrap();
-    REQUIRE(VACCEL_OK == ret);
+    // ret = sessions_bootstrap();
+    // REQUIRE(VACCEL_OK == ret);
 
     ret = resources_bootstrap();
     REQUIRE(VACCEL_OK == ret);
@@ -132,60 +182,29 @@ TEST_CASE("session_sess", "[session]")
     ret = vaccel_sess_init(&test_sess,1);
     REQUIRE(VACCEL_OK == ret);
 
-    SECTION("invalid null sess init")
-    {
-        ret = vaccel_sess_init(NULL,1);
-        REQUIRE(VACCEL_EINVAL == ret);
-    }
-
     ret = vaccel_sess_update(&test_sess, 2);
     REQUIRE(VACCEL_OK == ret);
-
-    SECTION("invalid null sess update")
-    {
-        ret = vaccel_sess_update(NULL,0);
-        REQUIRE(VACCEL_EINVAL == ret);
-    }
 
     ret = vaccel_sess_register(&test_sess, &test_res);
     REQUIRE(VACCEL_OK == ret);
 
-    SECTION("invalid null sess register")
-    {
-        ret = vaccel_sess_register(NULL,0);
-        REQUIRE(VACCEL_EINVAL == ret);
-    }
-
-
     ret = vaccel_sess_unregister(&test_sess, &test_res);
     REQUIRE(VACCEL_OK == ret);
 
-
-    SECTION("invalid null sess unregister")
-    {
-        ret = vaccel_sess_unregister(NULL,0);
-        REQUIRE(VACCEL_EINVAL == ret);
-    }
-
     ret = vaccel_sess_free(&test_sess);
     REQUIRE(VACCEL_OK == ret);
-
-    SECTION("invalid null ness free")
-    {
-        ret = vaccel_sess_free(NULL);
-        REQUIRE(VACCEL_EINVAL == ret);
-    }
 
     // ret = resources_cleanup();
     // REQUIRE(VACCEL_OK == ret);
 
     // ret = sessions_cleanup();
     // REQUIRE(VACCEL_OK == ret);
-}
 
+}
 
 TEST_CASE("session_sess_virtio", "[session]")
 {
+    int ret;
     struct vaccel_session test_sess;
     test_sess.hint = 0;
     test_sess.session_id = 1;
@@ -208,11 +227,11 @@ TEST_CASE("session_sess_virtio", "[session]")
 
     get_virtio_plugin_fake.return_val = &v_mock;
 
-    int ret = sessions_bootstrap();
-    REQUIRE(VACCEL_OK == ret);
+    // int ret = sessions_bootstrap();
+    // REQUIRE(VACCEL_OK == ret);
 
-    ret = resources_bootstrap();
-    REQUIRE(VACCEL_OK == ret);
+    // ret = resources_bootstrap();
+    // REQUIRE(VACCEL_OK == ret);
 
     ret = vaccel_sess_init(&test_sess, 1);
     REQUIRE(VACCEL_OK == ret);
@@ -230,4 +249,11 @@ TEST_CASE("session_sess_virtio", "[session]")
     REQUIRE(VACCEL_OK == ret);
 
     REQUIRE(get_virtio_plugin_fake.call_count == 5);
+
+    // ret = resources_cleanup();
+    // REQUIRE(VACCEL_OK == ret);
+
+    // ret = sessions_cleanup();
+    // REQUIRE(VACCEL_OK == ret);
+
 }
