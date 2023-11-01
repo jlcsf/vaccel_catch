@@ -144,7 +144,7 @@ TEST_CASE("register_plugin_function", "[plugins]") {
 
     REQUIRE(res == VACCEL_OK);
 
-    void *dl_handle = dlopen("./plugins/noop/libvaccel-noop.so", RTLD_LAZY);
+    void *dl_handle = dlopen("../plugins/noop/libvaccel-noop.so", RTLD_LAZY);
     if (!dl_handle) {
         FAIL("Error loading plugin library: " << dlerror());
     }
@@ -232,17 +232,11 @@ TEST_CASE("register_multiple_plugin_functions", "[plugins]") {
     ret = register_plugin(&no_op_plugin);
     REQUIRE(ret ==  VACCEL_OK);
 
-    SECTION("valid multiple functions registerations")
-    {
-        ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
-        REQUIRE(ret ==  VACCEL_OK);
-    }
+    ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
+    REQUIRE(ret ==  VACCEL_OK);
 
     SECTION("fetch_plugin_ops for the multiple opetations")
     {   
-        ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
-        REQUIRE(ret ==  VACCEL_OK);
-
         void* operation ;
         operation = get_plugin_op(VACCEL_EXEC, 0);
         REQUIRE(operation != nullptr);
@@ -257,9 +251,6 @@ TEST_CASE("register_multiple_plugin_functions", "[plugins]") {
 
     SECTION("fetch plugin operation using prio env")
     {
-        ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
-        REQUIRE(ret ==  VACCEL_OK);
-
         // we have implemented FPGA in our fixture and lets assume our plugin only implements FPGA functions
 	    noop_pinfo.type = VACCEL_PLUGIN_FPGA;
 

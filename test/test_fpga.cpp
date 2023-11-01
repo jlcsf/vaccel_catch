@@ -1,9 +1,11 @@
 #include <catch2/catch_test_macros.hpp>
 
+
 #include "error.h"
 #include "fpga.h"
 #include "session.h"
 
+#include <iostream>
 
 TEST_CASE("vaccel_fpga_add", "[vaccel_fpga_plugins]")
 {
@@ -14,6 +16,14 @@ TEST_CASE("vaccel_fpga_add", "[vaccel_fpga_plugins]")
 
     size_t len_A = sizeof(A) / sizeof(A[0]);
     size_t len_B = sizeof(B) / sizeof(B[0]);
+
+    const char* vaccel_backends = std::getenv("VACCEL_BACKENDS");
+
+    if (vaccel_backends) {
+        std::cout << "VACCEL_BACKENDS: " << vaccel_backends << std::endl;
+    } else {
+        std::cerr << "VACCEL_BACKENDS environment variable not set." << std::endl;
+    }
     
     SECTION("null session")
     {
