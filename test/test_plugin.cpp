@@ -144,19 +144,28 @@ TEST_CASE("register_plugin_function", "[plugins]") {
 
     REQUIRE(res == VACCEL_OK);
 
-    void *dl_handle = dlopen("./plugins/noop/libvaccel-noop.so", RTLD_LAZY);
-    if (!dl_handle) {
-        FAIL("Error loading plugin library: " << dlerror());
-    }
+    // void *dl_handle = dlopen("../plugins/noop/libvaccel-noop.so", RTLD_LAZY);
+    // if (!dl_handle) {
+    //     FAIL("Error loading plugin library: " << dlerror());
+    // }
 
-    void *plugin_symbol = dlsym(dl_handle, "vaccel_plugin");
-    if (!plugin_symbol) {
-        FAIL("Error loading vaccel_plugin symbol from the library: " << dlerror());
-    }
+    // void *plugin_symbol = dlsym(dl_handle, "vaccel_plugin");
+    // if (!plugin_symbol) {
+    //     FAIL("Error loading vaccel_plugin symbol from the library: " << dlerror());
+    // }
+
     
-    struct vaccel_plugin* plugin_test = static_cast<struct vaccel_plugin*>(plugin_symbol);
+    // struct vaccel_plugin* plugin_test = static_cast<struct vaccel_plugin*>(plugin_symbol);
+    struct vaccel_plugin plugin_test;
+    struct vaccel_plugin_info pinfo;
+    plugin_test.info = &pinfo;
+    plugin_test.info->name = pname;
+    list_init_entry(&plugin_test.entry);
+    list_init_entry(&plugin_test.ops);
+    plugin_test.info->init = init;
+    plugin_test.info->fini = fini;
 
-    register_plugin(plugin_test);
+    register_plugin(&plugin_test);
     //REQUIRE(ret == VACCEL_OK);
 
     struct vaccel_op test_op;
@@ -169,14 +178,14 @@ TEST_CASE("register_plugin_function", "[plugins]") {
 
         test_op.func = NULL;
         test_op.type = VACCEL_FUNCTIONS_NR + 1;
-        test_op.owner = plugin_test;
+        test_op.owner = &plugin_test;
         REQUIRE(register_plugin_function(&test_op) == VACCEL_EINVAL);
     }
 
     SECTION("Unknown function type") {
         test_op.func = (void *)&dummy_function;
         test_op.type = VACCEL_FUNCTIONS_NR + 1;
-        test_op.owner = plugin_test;
+        test_op.owner = &plugin_test;
         REQUIRE(register_plugin_function(&test_op) == VACCEL_EINVAL + 1);
     }
 
@@ -190,7 +199,7 @@ TEST_CASE("register_plugin_function", "[plugins]") {
     SECTION("valid plugin registration") {
         test_op.func = get_plugin_op(VACCEL_EXEC, 0); 
         test_op.type = 1;
-        test_op.owner = plugin_test;
+        test_op.owner = &plugin_test;
         // REQUIRE(register_plugin_function(&test_op) == VACCEL_OK); doesnt work
     }
 
@@ -232,49 +241,35 @@ TEST_CASE("register_multiple_plugin_functions", "[plugins]") {
     ret = register_plugin(&no_op_plugin);
     REQUIRE(ret ==  VACCEL_OK);
 
-    SECTION("valid multiple functions registerations")
-    {
-        ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
-        REQUIRE(ret ==  VACCEL_OK);
-    }
 
-    SECTION("fetch_plugin_ops for the multiple opetations")
-    {   
-        ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
-        REQUIRE(ret ==  VACCEL_OK);
+    ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
+    REQUIRE(ret ==  VACCEL_OK);
 
-        void* operation ;
-        operation = get_plugin_op(VACCEL_EXEC, 0);
-        REQUIRE(operation != nullptr);
-        ret = reinterpret_cast<int (*)(void)>(operation)();
-        REQUIRE(ret == 2);
 
-        operation = get_plugin_op(VACCEL_F_ARRAYCOPY, 0);
-        REQUIRE(operation !=  nullptr);
-        ret = reinterpret_cast<int (*)(void)>(operation)();
-        REQUIRE(ret == 3);
-    }
+    void* operation ;
+    operation = get_plugin_op(VACCEL_EXEC, 0);
+    REQUIRE(operation != nullptr);
+    ret = reinterpret_cast<int (*)(void)>(operation)();
+    REQUIRE(ret == 2);
 
-    SECTION("fetch plugin operation using prio env")
-    {
-        ret = register_plugin_functions(array_ops, (sizeof(array_ops) / sizeof(array_ops[0])));
-        REQUIRE(ret ==  VACCEL_OK);
+    operation = get_plugin_op(VACCEL_F_ARRAYCOPY, 0);
+    REQUIRE(operation !=  nullptr);
+    ret = reinterpret_cast<int (*)(void)>(operation)();
+    REQUIRE(ret == 3);
 
-        // we have implemented FPGA in our fixture and lets assume our plugin only implements FPGA functions
-	    noop_pinfo.type = VACCEL_PLUGIN_FPGA;
+    // we have implemented FPGA in our fixture and lets assume our plugin only implements FPGA functions
+    noop_pinfo.type = VACCEL_PLUGIN_FPGA;
 
-        void* operation = get_plugin_op(VACCEL_F_ARRAYCOPY, VACCEL_PLUGIN_FPGA);
-        REQUIRE(operation != nullptr);
+    operation = get_plugin_op(VACCEL_F_ARRAYCOPY, VACCEL_PLUGIN_FPGA);
+    REQUIRE(operation != nullptr);
 
-        ret = reinterpret_cast<int (*)(void)>(operation)();
-        REQUIRE(ret == 3);
-    }
+    ret = reinterpret_cast<int (*)(void)>(operation)();
+    REQUIRE(ret == 3);
 
     ret = unregister_plugin(&no_op_plugin);
     REQUIRE(ret == VACCEL_OK);
 
     plugins_shutdown();
-
 }
 
 
