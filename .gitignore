@@ -19,8 +19,11 @@ build*
 .cache
 .ccls-cache
 .vscode
+.legacy_tests
 
 test_output.txt
 temp
 .gcov
 .info
+
+run_tests.sh 
