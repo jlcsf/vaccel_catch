@@ -7,16 +7,19 @@ cd build
 cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON
 make
 export VACCEL_BACKENDS=./plugins/noop/libvaccel-noop.so
+# export VACCEL_DEBUG_LEVEL=4
+
 
 test_targets=(
+  "tests"
   "test_plugins"
+  "test_fpga"
   "test_session"
   "test_misc"
   "test_resource"
   "test_id_pool"
-  "test_fpga"
-  "test_vaccel"
   "test_log"
+  "test_vaccel"
 )
 
 

@@ -15,7 +15,11 @@
 #ifndef __VACCEL_H__
 #define __VACCEL_H__
 
+<<<<<<< Updated upstream
 #define VACCELRT_VERSION "9bdc6ea"
+=======
+#define VACCELRT_VERSION "9bdc6ea-dirty"
+>>>>>>> Stashed changes
 
 #include "error.h"
 #include "log.h"
