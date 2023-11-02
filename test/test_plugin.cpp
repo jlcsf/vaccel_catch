@@ -23,7 +23,7 @@ static int init(void)
     return VACCEL_OK;
 }
 
-TEST_CASE("plugin_register", "[plugin]") {
+TEST_CASE("plugin_register") {
 
     struct vaccel_plugin plugin;
     struct vaccel_plugin_info pinfo;
@@ -93,7 +93,7 @@ TEST_CASE("plugin_register", "[plugin]") {
     plugins_shutdown();
 }
 
-TEST_CASE("plugin_unregister", "[plugin]") {
+TEST_CASE("plugin_unregister") {
 
     struct vaccel_plugin plugin;
     struct vaccel_plugin_info pinfo;
@@ -110,35 +110,38 @@ TEST_CASE("plugin_unregister", "[plugin]") {
     SECTION("no plugin to unregister")
     {
         REQUIRE(unregister_plugin(NULL) == VACCEL_EINVAL);
+        plugins_shutdown();
     }
 
     SECTION("plugin state is not initialised")
     {
         plugins_shutdown();
         REQUIRE(unregister_plugin(&plugin) == VACCEL_EBACKEND);
+        plugins_shutdown();
     }
 
     SECTION("entry_linked(&plugin.entry) is false")
     {
         list_unlink_entry(&plugin.entry);
         REQUIRE(unregister_plugin(&plugin) == VACCEL_ENOENT);
+        plugins_shutdown();
     }
 
     SECTION("plugin has no info entry")
     {
         plugin.info = NULL;
         REQUIRE(unregister_plugin(&plugin) == VACCEL_EINVAL);
+        plugins_shutdown();
     }
 
     SECTION("plugin succesfully unregistered")
     {
         REQUIRE(unregister_plugin(&plugin) == VACCEL_OK);
+        plugins_shutdown();
     }
-
-    plugins_shutdown();
 }
 
-TEST_CASE("register_plugin_function", "[plugins]") {
+TEST_CASE("register_plugin_function") {
     
     int res = plugins_bootstrap();
 
@@ -210,7 +213,7 @@ static int no_op() {return 1;}
 static int no_op_exec(){return 2;}
 static int no_op_fpga() {return 3;}
 
-TEST_CASE("register_multiple_plugin_functions", "[plugins]") {
+TEST_CASE("register_multiple_plugin_functions") {
 
     vaccel_plugin no_op_plugin;
     vaccel_plugin_info noop_pinfo;
@@ -273,7 +276,7 @@ TEST_CASE("register_multiple_plugin_functions", "[plugins]") {
 }
 
 
-TEST_CASE("register_plugin_functions_operation_fetch", "[plugins]") {
+TEST_CASE("register_plugin_functions_operation_fetch") {
 
     vaccel_plugin no_op_plugin;
     vaccel_plugin_info noop_pinfo;
@@ -345,7 +348,7 @@ TEST_CASE("register_plugin_functions_operation_fetch", "[plugins]") {
 }
 
 
-TEST_CASE("get_all_available_functions", "[plugins]") {
+TEST_CASE("get_all_available_functions") {
 
     vaccel_plugin no_op_plugin;
     vaccel_plugin_info noop_pinfo;
