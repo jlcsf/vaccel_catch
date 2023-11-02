@@ -16,6 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install dependencies
+        run: sudo apt-get install lcov
+
       - name: Set up CMake and run tests
         run: |
           export CXX=g++
@@ -25,4 +28,51 @@ jobs:
           cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON -DBUILD_EXAMPLES=ON
           make
           make test ARGS="-V"
+          cd ../
         shell: bash
+
+      - name: Generate Code Coverage
+        run: |
+          mkdir -p build/coverage_data
+          find build -type f -name "*.gcda" -exec cp {} build/coverage_data/ \;
+          find build -type f -name "*.gcno" -exec cp {} build/coverage_data/ \;
+          cd build/
+          lcov -b ../src -c -d coverage_data -o total_coverage.info
+          lcov --remove total_coverage.info "/usr/include/*" "*/build/_deps/*" -o total_coverage_filtered.info
+          genhtml total_coverage_filtered.info --output-directory ../coverage_report
+          if [ $? -eq 0 ]; then
+            mkdir -p $GITHUB_WORKSPACE/coverage_report
+            cp -r ../coverage_report/* $GITHUB_WORKSPACE/coverage_report
+          fi
+        shell: bash
+      
+  
+
+  send-coverage-results:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: git config --global user.email "actions@github.com" && git config --global user.name "GitHub Actions"
+
+      - name: Clone the target repository
+        run: |
+          git clone https://github.com/jlcsf/vaccel_code_coverage target-repo
+          cd target-repo
+          git checkout main
+          git pull origin main
+
+      - name: Copy code coverage results
+        run: |
+          mkdir -p coverage_report
+          cp -r $GITHUB_WORKSPACE/coverage_report/* ./coverage_report
+
+      - name: Commit and push code coverage results
+        run: |
+          git add .
+          git commit -m "Add code coverage results"
+          git push origin main
