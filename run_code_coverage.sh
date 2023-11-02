@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir build/coverage_data
 
 find build -type f -name "*.gcda" -exec cp {} build/coverage_data/ \;
 find build -type f -name "*.gcno" -exec cp {} build/coverage_data/ \;
