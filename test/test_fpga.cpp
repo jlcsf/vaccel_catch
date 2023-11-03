@@ -1,9 +1,14 @@
 #include <catch2/catch_test_macros.hpp>
 
+#include <atomic>
+using atomic_int = std::atomic<int>;
+using atomic_uint = std::atomic<unsigned int>;
 
+extern "C"{
 #include "error.h"
 #include "fpga.h"
 #include "session.h"
+}
 
 #include <iostream>
 
