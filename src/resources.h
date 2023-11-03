@@ -16,15 +16,8 @@
 #define __RESOURCES_H__
 
 #include <stdint.h>
+#include <stdatomic.h>
 
-// #ifdef __cplusplus
-//     #include <atomic> 
-//     using namespace std;
-// #else
-//     #include <stdatomic.h> 
-// #endif
-
-#include <stdatomic.h> 
 #include "include/resources.h"
 #include "id_pool.h"
 #include "list.h"

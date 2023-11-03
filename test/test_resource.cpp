@@ -21,10 +21,10 @@ extern "C" {
 #include <stdio.h>
 #include <stdbool.h>
 #include <sys/stat.h>
-
 int cleanup_resource_mock([[maybe_unused]] void *data){
     return 0;
 }
+
 TEST_CASE("destroy_OK", "[Resources]") {
     int ret;
     struct vaccel_resource res;
@@ -53,7 +53,6 @@ TEST_CASE("destroy_OK", "[Resources]") {
     }
 
 }
-
 
 TEST_CASE("Resource Create Rundir", "[Resources]") {
 

@@ -156,14 +156,6 @@ const char *vaccel_rundir(void)
 	return rundir;
 }
 
-#ifdef UNIT_TESTING
-int create_vaccel_rundir_for_testing(void) {
-    return create_vaccel_rundir();
-}
-#endif
-
-
-
 __attribute__((constructor))
 static void vaccel_init(void)
 {
@@ -209,11 +201,7 @@ static void vaccel_fini(void)
 {
 	vaccel_debug("Shutting down vAccel");
 	plugins_shutdown();
-	vaccel_debug("Shut down plugins");
 	resources_cleanup();
-	vaccel_debug("Shut down resources");
 	sessions_cleanup();
-	vaccel_debug("Shut down sessions");
 	cleanup_vaccel_rundir();
-	vaccel_debug("Shut down rundir");
 }

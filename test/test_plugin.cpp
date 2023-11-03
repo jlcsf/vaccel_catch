@@ -189,14 +189,14 @@ TEST_CASE("register_plugin_function") {
         test_op.func = (void *)&dummy_function;
         test_op.type = VACCEL_FUNCTIONS_NR + 1;
         test_op.owner = &plugin_test;
-        REQUIRE(register_plugin_function(&test_op) == VACCEL_EINVAL + 1);
+        REQUIRE(register_plugin_function(&test_op) == VACCEL_EINVAL);
     }
 
     SECTION("plugin owner is unknown") {
         test_op.func = (void *)&dummy_function;
         test_op.type = 1;
         test_op.owner = NULL;
-        REQUIRE(register_plugin_function(&test_op) == VACCEL_EINVAL + 2);
+        REQUIRE(register_plugin_function(&test_op) == VACCEL_EINVAL);
     }
 
     SECTION("valid plugin registration") {
