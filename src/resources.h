@@ -17,14 +17,14 @@
 
 #include <stdint.h>
 
-#ifdef __cplusplus
-    #include <atomic> 
-    using namespace std;
-#else
-    #include <stdatomic.h> 
-#endif
+// #ifdef __cplusplus
+//     #include <atomic> 
+//     using namespace std;
+// #else
+//     #include <stdatomic.h> 
+// #endif
 
-// #include <stdatomic.h> 
+#include <stdatomic.h> 
 #include "include/resources.h"
 #include "id_pool.h"
 #include "list.h"

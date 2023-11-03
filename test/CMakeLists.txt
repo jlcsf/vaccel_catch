@@ -65,11 +65,15 @@ target_include_directories(test_misc
 target_compile_options(test_misc PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
 target_link_libraries(test_misc PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
-add_executable(test_resource ${PROJECT_SOURCE_DIR}/test/test_resource.cpp)
+
+add_executable(
+	test_resource
+	test_resource.cpp
+)
 target_include_directories(test_resource
     PRIVATE
-        ../third-party/slog/src
         ../src
+        ../src/include
         ../fff
 )
 target_compile_options(test_resource PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov) 
@@ -134,7 +138,6 @@ set_tests_properties(
     ENVIRONMENT "VACCEL_DEBUG_LEVEL=4;VACCEL_BACKENDS=${CMAKE_BINARY_DIR}/plugins/noop/libvaccel-noop.so"
     ARGS=--order rand --warn NoAssertions
 )
-
 
 set_tests_properties(
     test_plugins
