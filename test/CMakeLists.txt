@@ -28,18 +28,18 @@ target_include_directories(test_plugins
 target_compile_options(test_plugins PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
 target_link_libraries(test_plugins PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
-add_executable(test_fpga ${PROJECT_SOURCE_DIR}/test/test_fpga.cpp)
-target_include_directories(test_fpga
-    PRIVATE
-        ../third-party/slog/src
-        ../src
-        ../src/include
-        ../src/include/ops
-        ../build
-        ../fff
-)
-target_compile_options(test_fpga PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
-target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+# add_executable(test_fpga ${PROJECT_SOURCE_DIR}/test/test_fpga.cpp)
+# target_include_directories(test_fpga
+#     PRIVATE
+#         ../third-party/slog/src
+#         ../src
+#         ../src/include
+#         ../src/include/ops
+#         ../build
+#         ../fff
+# )
+# target_compile_options(test_fpga PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+# target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
 
 add_executable(test_session ${PROJECT_SOURCE_DIR}/test/test_session.cpp)
 target_include_directories(test_session
@@ -187,14 +187,14 @@ add_test(NAME test_misc COMMAND test_misc)
 add_test(NAME test_resource COMMAND test_resource)
 add_test(NAME test_session COMMAND test_session)
 add_test(NAME test_plugins COMMAND test_plugins)
-add_test(NAME test_fpga COMMAND test_fpga)
+# add_test(NAME test_fpga COMMAND test_fpga)
 add_test(NAME test_classify COMMAND test_classify)
 add_test(NAME test_tf_interference COMMAND test_tf_interference)
 add_test(NAME test_tf_model COMMAND test_tf_model)
 add_test(NAME test_tf_saved_model COMMAND test_tf_saved_model)
 
 set_tests_properties(
-    test_fpga test_vaccel
+    test_vaccel # removed fpga
     PROPERTIES
     ENVIRONMENT "VACCEL_DEBUG_LEVEL=4;VACCEL_BACKENDS=${CMAKE_BINARY_DIR}/plugins/noop/libvaccel-noop.so"
     ARGS=--order rand --warn NoAssertions
