@@ -139,6 +139,7 @@ target_include_directories(test_tf_interference
         ../src/include/ops
         ../build
         ../fff
+        ../src/resources
 )
 target_compile_options(test_tf_interference PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
 target_link_libraries(test_tf_interference PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
