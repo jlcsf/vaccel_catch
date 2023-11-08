@@ -65,8 +65,8 @@ static unsigned char *read_file(const char *path, size_t *len)
 }
 
 
-TEST_CASE("main"){
-    
+TEST_CASE("tf_model")
+{   
     struct vaccel_tf_model model;
     struct vaccel_session sess;
     const char *model_path = "../../test/models/tf/lstm2/saved_model.pb";
@@ -107,4 +107,9 @@ TEST_CASE("main"){
     REQUIRE(ret == 0);
 
     free(buff);
-}   
+}
+
+TEST_CASE("saved_model")
+{
+
+}

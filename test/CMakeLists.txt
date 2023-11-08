@@ -159,6 +159,21 @@ target_compile_options(test_tf_model PRIVATE -Wall -Wextra -g -ggdb --coverage -
 target_link_libraries(test_tf_model PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
 
 
+add_executable(test_tf_saved_model ${PROJECT_SOURCE_DIR}/test/test_tf_saved_model.cpp)
+target_include_directories(test_tf_saved_model
+    PRIVATE
+        ../third-party/slog/src
+        ../src
+        ../src/include
+        ../src/include/ops
+        ../build
+        ../fff
+        ../src/resources
+)
+target_compile_options(test_tf_saved_model PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
+target_link_libraries(test_tf_saved_model PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/_deps/catch2-/src/extras")
 include(CTest)
 include(Catch)
@@ -176,6 +191,7 @@ add_test(NAME test_fpga COMMAND test_fpga)
 add_test(NAME test_classify COMMAND test_classify)
 add_test(NAME test_tf_interference COMMAND test_tf_interference)
 add_test(NAME test_tf_model COMMAND test_tf_model)
+add_test(NAME test_tf_saved_model COMMAND test_tf_saved_model)
 
 set_tests_properties(
     test_fpga test_vaccel
@@ -185,7 +201,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    test_plugins test_classify test_tf_interference test_tf_model
+    test_plugins test_classify test_tf_interference test_tf_model test_tf_saved_model
     PROPERTIES
     ENVIRONMENT "VACCEL_BACKENDS=${CMAKE_BINARY_DIR}/plugins/noop/libvaccel-noop.so"
     ARGS=--order rand --warn NoAssertions
