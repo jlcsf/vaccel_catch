@@ -176,3 +176,100 @@ close_session:
 
 	    printf("%d\n", ret);
 }
+
+TEST_CASE("depth")
+{
+
+    char program_name[] = "program_name";
+    char file_path[] = "../../test/images/example.jpg";
+    char iterations[] = "2";
+    char *argv[] = {program_name, file_path, iterations};
+    int ret;
+	char *image;
+    size_t image_size;
+	char out_imagename[512];
+	struct vaccel_session sess;
+
+    ret = vaccel_sess_init(&sess, 0);
+    REQUIRE(ret == VACCEL_OK);
+
+    ret = read_file(argv[1], &image, &image_size);
+    REQUIRE(ret == VACCEL_OK);
+
+    for (int i = 0; i < atoi(argv[2]); ++i) {
+		ret = vaccel_image_depth(&sess, image, (unsigned char*)out_imagename,
+				image_size, sizeof(out_imagename));
+
+		if (ret) {
+			fprintf(stderr, "Could not run op: %d\n", ret);
+			goto close_session;
+		}
+
+		if (i == 0)
+			printf("depth estimation imagename: %s\n", out_imagename);
+	}
+
+
+close_session:
+	free(image);
+	if (vaccel_sess_free(&sess) != VACCEL_OK) {
+		fprintf(stderr, "Could not clear session\n");
+		printf("%d\n", 1);
+	}
+
+	printf("%d\n", ret);
+
+}
+
+TEST_CASE("depth_generic")
+{   
+    char program_name[] = "program_name";
+    char file_path[] = "../../test/images/example.jpg";
+    char iterations[] = "2";
+    char *argv[] = {program_name, file_path, iterations};
+
+	int ret;
+	char *image;
+    size_t image_size;
+	char out_imagename[512];
+	struct vaccel_session sess;
+
+    ret = vaccel_sess_init(&sess, 0);
+    REQUIRE(ret == VACCEL_OK);
+
+    ret = read_file(file_path, &image, &image_size);
+    REQUIRE(ret == 0);
+
+    uint32_t image_size_uint32;
+    if (image_size <= UINT32_MAX) {
+        image_size_uint32 = static_cast<uint32_t>(image_size);
+    } else {
+        REQUIRE(1==2); // lets fail the test here
+    }
+
+    enum vaccel_op_type op_type = VACCEL_IMG_DEPTH;
+    struct vaccel_arg read[2] = {
+		{ .size = sizeof(enum vaccel_op_type), .buf = &op_type},
+		{ .size = image_size_uint32, .buf = image }};
+
+	struct vaccel_arg write[1] = {
+		{ .size = sizeof(out_imagename), .buf = out_imagename }};
+
+	for (int i = 0; i < atoi(argv[2]); ++i) {
+		ret = vaccel_genop(&sess, read, 2, write, 1);
+		if (ret) {
+			fprintf(stderr, "Could not run op: %d\n", ret);
+			goto close_session;
+        }
+	}
+
+
+close_session:
+        free(image);
+        if (vaccel_sess_free(&sess) != VACCEL_OK) {
+            fprintf(stderr, "Could not clear session\n");
+            printf("%d\n", 1);
+	    }
+
+	    printf("%d\n", ret);
+}
