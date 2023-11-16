@@ -13,3 +13,4 @@ TEST_CASE( "Factorials are computed", "[factorial]" ) {
     REQUIRE( factorial( 4) == 24);
     REQUIRE( factorial(10) == 3'628'800 );
 }
+
