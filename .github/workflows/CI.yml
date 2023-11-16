@@ -46,10 +46,10 @@ jobs:
             -DCMAKE_C_COMPILER=gcc-12 \
             -DCMAKE_CXX_COMPILER=g++-12
           cmake --build . --config ${{matrix.build_type}} && \
-          make test && \
           make install -C src && \
           make install -C third-party && \
-          make install -C examples
+          make install -C examples \
+          make test
       
 
     - name: Build vAccel plugins
