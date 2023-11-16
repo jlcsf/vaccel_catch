@@ -42,6 +42,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
             -DENABLE_TESTS=ON \
             -DBUILD_EXAMPLES=ON \
+            -DBUILD_PLUGIN_NOOP=ON \
             -DCMAKE_CXX_STANDARD=11 \
             -DCMAKE_C_COMPILER=gcc-12 \
             -DCMAKE_CXX_COMPILER=g++-12
