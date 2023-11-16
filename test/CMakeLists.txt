@@ -39,7 +39,7 @@ target_include_directories(test_fpga
         ../fff
 )
 target_compile_options(test_fpga PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
-target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+target_link_libraries(test_fpga PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 add_executable(test_session ${PROJECT_SOURCE_DIR}/test/test_session.cpp)
 target_include_directories(test_session
@@ -115,7 +115,7 @@ target_include_directories(test_log
         ../fff
 )
 target_compile_options(test_log PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
-target_link_libraries(test_log PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+target_link_libraries(test_log PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 add_executable(test_image ${PROJECT_SOURCE_DIR}/test/test_image.cpp)
 target_include_directories(test_image
@@ -128,7 +128,7 @@ target_include_directories(test_image
         ../fff
 )
 target_compile_options(test_image PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
-target_link_libraries(test_image PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+target_link_libraries(test_image PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 add_executable(test_tf_interference ${PROJECT_SOURCE_DIR}/test/test_tf_interference.cpp)
 target_include_directories(test_tf_interference
@@ -142,7 +142,7 @@ target_include_directories(test_tf_interference
         ../src/resources
 )
 target_compile_options(test_tf_interference PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
-target_link_libraries(test_tf_interference PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+target_link_libraries(test_tf_interference PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 add_executable(test_tf_model ${PROJECT_SOURCE_DIR}/test/test_tf_model.cpp)
 target_include_directories(test_tf_model
@@ -156,7 +156,7 @@ target_include_directories(test_tf_model
         ../src/resources
 )
 target_compile_options(test_tf_model PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
-target_link_libraries(test_tf_model PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+target_link_libraries(test_tf_model PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 
 add_executable(test_tf_saved_model ${PROJECT_SOURCE_DIR}/test/test_tf_saved_model.cpp)
@@ -171,7 +171,7 @@ target_include_directories(test_tf_saved_model
         ../src/resources
 )
 target_compile_options(test_tf_saved_model PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
-target_link_libraries(test_tf_saved_model PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+target_link_libraries(test_tf_saved_model PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 add_executable(test_exec ${PROJECT_SOURCE_DIR}/test/test_exec.cpp)
 target_include_directories(test_exec
@@ -185,7 +185,7 @@ target_include_directories(test_exec
         ../src/resources
 )
 target_compile_options(test_exec PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
-target_link_libraries(test_exec PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+target_link_libraries(test_exec PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 add_executable(test_minmax ${PROJECT_SOURCE_DIR}/test/test_minmax.cpp)
 target_include_directories(test_minmax
@@ -199,7 +199,7 @@ target_include_directories(test_minmax
         ../src/resources
 )
 target_compile_options(test_minmax PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
-target_link_libraries(test_minmax PRIVATE Catch2::Catch2WithMain vaccel vaccel-noop gcov --coverage)
+target_link_libraries(test_minmax PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
 
 
 
