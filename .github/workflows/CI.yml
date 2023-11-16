@@ -48,7 +48,6 @@ jobs:
           cmake --build . --config ${{matrix.build_type}} && \
           make install -C src && \
           make install -C third-party && \
-          make install -C examples &&\
           make test
       
 
