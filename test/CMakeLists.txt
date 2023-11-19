@@ -65,6 +65,7 @@ set(TESTS_API
     test_exec
     test_minmax
     test_noop
+    test_blas
 )
 
 foreach(TEST_NAME ${TESTS_CORE})
@@ -85,7 +86,7 @@ set_tests_properties(
 )
 
 set_tests_properties(
-    test_plugin test_image test_tf_interference test_tf_model test_tf_saved_model test_exec test_minmax test_noop
+    test_plugin test_image test_tf_interference test_tf_model test_tf_saved_model test_exec test_minmax test_noop test_blas
     PROPERTIES
     ENVIRONMENT "VACCEL_BACKENDS=${CMAKE_BINARY_DIR}/plugins/noop/libvaccel-noop.so"
     ARGS=--order rand --warn NoAssertions
