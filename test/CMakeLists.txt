@@ -10,7 +10,7 @@ FetchContent_MakeAvailable(Catch2)
 
 file(GLOB HEADER_FILES "${CMAKE_SOURCE_DIR}" )
 file(GLOB HEADER_INCLUDE_FILES "${CMAKE_SOURCE_DIR}")
-
+set(CMAKE_CXX_STANDARD 11) 
 
 add_executable(tests ${PROJECT_SOURCE_DIR}/test/test.cpp)
 target_compile_options(tests PRIVATE -Wall -Wextra -g -ggdb --coverage -lgcov)
