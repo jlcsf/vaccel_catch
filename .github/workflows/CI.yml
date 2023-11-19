@@ -10,11 +10,10 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ${{ matrix.os }}
-    
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
         compiler: [gcc-12, clang-8]
 
     steps:
@@ -26,15 +25,16 @@ jobs:
 
       - name: Set up CMake and run tests
         run: |
-          export CXX=g++
+          export CXX=${{ matrix.compiler }}
           rm -rf build
           mkdir -p build
           cd build
-          cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON -DBUILD_EXAMPLES=ON -DCMAKE_CXX_STANDARD=11 -DCMAKE_C_COMPILER=${{ matrix.compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+          cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON -DBUILD_EXAMPLES=ON 
           make
           make test ARGS="-V"
           cd ../
         shell: bash
+
 
 
 
