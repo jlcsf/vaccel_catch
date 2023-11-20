@@ -13,10 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         architecture: [x86_64, aarch64, armv7l]
         build_type: [Debug, Release]
-        fail-fast: false
+
+    
 
     steps:
       - name: Checkout code
@@ -38,6 +40,7 @@ jobs:
         shell: bash
         env:
           ARCHITECTURE: ${{ matrix.architecture }}
+
 
 
 
