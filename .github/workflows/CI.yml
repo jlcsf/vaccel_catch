@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches:
@@ -6,25 +7,38 @@ on:
   pull_request:
     branches:
       - '*'
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        architecture: [x86_64, aarch64, armv7l]
+        build_type: [Debug, Release]
+        fail-fast: false
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Install dependencies
         run: sudo apt-get install lcov
+
       - name: Set up CMake and run tests
         run: |
           export CXX=g++
           rm -rf build
           mkdir -p build
           cd build
-          cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON -DBUILD_EXAMPLES=ON -DCMAKE_CXX_STANDARD=11 -DCMAKE_C_COMPILER=gcc-12 -DCMAKE_CXX_COMPILER=g++-12
+          cmake ../ -DBUILD_PLUGIN_NOOP=ON -DENABLE_TESTS=ON -DBUILD_EXAMPLES=ON -DCMAKE_CXX_STANDARD=11 -DCMAKE_C_COMPILER=gcc-12 -DCMAKE_CXX_COMPILER=g++-12 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
           make
           make test ARGS="-V"
           cd ../
         shell: bash
+        env:
+          ARCHITECTURE: ${{ matrix.architecture }}
+
 
 
 
