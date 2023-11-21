@@ -22,9 +22,8 @@ extern "C"{
 
 #include <atomic>'
 
-using atomic_int = std::atomic<int>;
-using atomic_uint = std::atomic<unsigned int>;
-
+//  using atomic_int = std::atomic<int>;
+// using atomic_uint = std::atomic<unsigned int>;
 extern "C"{
 #include "test_header.h"
 #include ...
@@ -51,9 +50,8 @@ So far in our test we also use ```SECTIONS``` for nesting test cases within a te
 
 #include <atomic>'
 
-using atomic_int = std::atomic<int>;
-using atomic_uint = std::atomic<unsigned int>;
-
+//  using atomic_int = std::atomic<int>;
+// using atomic_uint = std::atomic<unsigned int>;
 extern "C"{
 #include "test_header.h"
 #include ...

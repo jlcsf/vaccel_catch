@@ -2,9 +2,8 @@
 #include <fff.h>
 #include <atomic>
 
-using atomic_int = std::atomic<int>;
-using atomic_uint = std::atomic<unsigned int>;
-DEFINE_FFF_GLOBALS;
+//  using atomic_int = std::atomic<int>;
+// using atomic_uint = std::atomic<unsigned int>;DEFINE_FFF_GLOBALS;
 
 extern "C"{
     /*
