@@ -90,7 +90,7 @@ TEST_CASE("plugin_register") {
        
     }
 
-    plugins_shutdown();
+    // plugins_shutdown();
 }
 
 TEST_CASE("plugin_unregister") {
@@ -110,14 +110,14 @@ TEST_CASE("plugin_unregister") {
     SECTION("no plugin to unregister")
     {
         REQUIRE(unregister_plugin(NULL) == VACCEL_EINVAL);
-        // plugins_shutdown();
+        plugins_shutdown();
     }
 
     SECTION("plugin state is not initialised")
     {
-        // plugins_shutdown();
+        plugins_shutdown();
         // REQUIRE(unregister_plugin(&plugin) == VACCEL_EBACKEND);
-        // plugins_shutdown();
+        plugins_shutdown();
         REQUIRE(1==1);
     }
 
@@ -125,20 +125,20 @@ TEST_CASE("plugin_unregister") {
     {
         list_unlink_entry(&plugin.entry);
         REQUIRE(unregister_plugin(&plugin) == VACCEL_ENOENT);
-        // plugins_shutdown();
+        plugins_shutdown();
     }
 
     SECTION("plugin has no info entry")
     {
         plugin.info = NULL;
         REQUIRE(unregister_plugin(&plugin) == VACCEL_EINVAL);
-        // plugins_shutdown();
+        plugins_shutdown();
     }
 
     SECTION("plugin succesfully unregistered")
     {
         REQUIRE(unregister_plugin(&plugin) == VACCEL_OK);
-        // plugins_shutdown();
+        plugins_shutdown();
     }
 }
 
@@ -207,7 +207,7 @@ TEST_CASE("register_plugin_function") {
         // REQUIRE(register_plugin_function(&test_op) == VACCEL_OK); doesnt work
     }
 
-    plugins_shutdown();
+    // plugins_shutdown();
 }
 
 static int no_op() {return 1;}
@@ -273,7 +273,7 @@ TEST_CASE("register_multiple_plugin_functions") {
     ret = unregister_plugin(&no_op_plugin);
     REQUIRE(ret == VACCEL_OK);
 
-    plugins_shutdown();
+    // plugins_shutdown();
 }
 
 
@@ -345,7 +345,7 @@ TEST_CASE("register_plugin_functions_operation_fetch") {
     ret = unregister_plugin(&no_op_plugin);
     REQUIRE(ret == VACCEL_OK);
 
-    plugins_shutdown();
+    // plugins_shutdown();
 }
 
 
@@ -386,7 +386,7 @@ TEST_CASE("get_all_available_functions") {
     ret = unregister_plugin(&no_op_plugin);
     REQUIRE(ret == VACCEL_OK);
 
-    plugins_shutdown();
+    // plugins_shutdown();
 }
 
 
