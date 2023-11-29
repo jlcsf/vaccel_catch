@@ -26,4 +26,5 @@ temp
 .gcov
 .info
 
-run_tests.sh 
+run_tests.sh
+test_old
