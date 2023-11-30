@@ -32,7 +32,7 @@ TEST_CASE("plugin_test_basic_test", "[plugin_tests]")
     plugin.info = &pinfo;
     plugin.info->name = pname;
     list_init_entry(&plugin.entry);
-    list_init(&plugin.ops);
+    list_init_entry(&plugin.ops);
     plugin.info->init = init;
     plugin.info->fini = fini;
 
