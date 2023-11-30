@@ -35,7 +35,7 @@ TEST_CASE("plugin_test_basic_test", "[plugin_tests]")
     pinfo.fini = fini;
 
     list_init_entry(&plugin_test.entry);
-    list_init(&plugin_test.ops); 
+    list_init_entry(&plugin_test.ops); 
     
     plugin_test.info = &pinfo;
 
