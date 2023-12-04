@@ -20,8 +20,7 @@ function(add_test_target_core TARGET_NAME SOURCE_FILE)
             ../third-party/slog/src
             ../src
             ../src/include
-            ../build
-            ../fff
+            ./fff
     )
     target_compile_options(${TARGET_NAME} PRIVATE ${COMMON_COMPILE_OPTIONS})
     target_link_libraries(${TARGET_NAME} PRIVATE Catch2::Catch2WithMain vaccel gcov --coverage)
@@ -36,8 +35,7 @@ function(add_test_target_api TARGET_NAME SOURCE_FILE)
             ../src
             ../src/include
             ../src/include/ops
-            ../build
-            ../fff
+            ./fff
             ../src/resources
     )
     target_compile_options(${TARGET_NAME} PRIVATE ${COMMON_COMPILE_OPTIONS})
